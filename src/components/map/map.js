@@ -1,33 +1,76 @@
-import React, { Component } from "react";
-import GoogleMapReact from 'google-map-react';
+import React, {Fragment} from "react";
+import {
+  withGoogleMap,
+  GoogleMap,
+  withScriptjs,
+  Marker,
+  Circle
+} from "react-google-maps";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
- 
-export default class Map extends Component {
-  static defaultProps = {
-    center: {
-      lat: 48.92,
-      lng: 24.71
-    },
-    zoom: 11
-  };
- 
-  render() {
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height: '100vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyBLlwasnMbQP4pp1Qx0poPnCqnJ_C1lPhk' }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
-            text="My Marker"
-          />
-        </GoogleMapReact>
-      </div>
+
+const Map = props => {
+//  console.log(props);
+    let iconMarker = new window.google.maps.MarkerImage(
+      "https://lh3.googleusercontent.com/bECXZ2YW3j0yIEBVo92ECVqlnlbX9ldYNGrCe0Kr4VGPq-vJ9Xncwvl16uvosukVXPfV=w300",
+      null, /* size is determined at runtime */
+      null, /* origin is 0,0 */
+      null, /* anchor is bottom center of the scaled image */
+      new window.google.maps.Size(32, 32)
     );
-  }
+
+    return (
+      <GoogleMap
+        defaultZoom={props.zoom}
+        defaultCenter={props.center}
+      >
+        
+              <Marker 
+                position={{
+                  lat: props.latitude, // 48.9185051,
+                  lng: props.longitude // 24.7152683
+                }}
+              />
+
+
+        {props.sanitizers.map(sanitizer => {
+          return (
+            <Fragment key={sanitizer.id}>
+              <Marker
+                icon={iconMarker} 
+                // onClick={onClick} 
+                title={sanitizer.title} 
+                position={{
+                  lat: parseFloat(sanitizer.latitude),
+                  lng: parseFloat(sanitizer.longitude)
+                }}
+              /> 
+            </Fragment>
+          );
+        })}
+
+        {props.places.map(place => {
+          return (
+            <Fragment key={place.id}>
+
+              {/* <Marker
+                position={{
+                  lat: parseFloat(place.latitude),
+                  lng: parseFloat(place.longitude)
+                }}
+              /> */}
+              {place.circle && <Circle
+                defaultCenter={{
+                  lat: parseFloat(place.latitude),
+                  lng: parseFloat(place.longitude)
+                }}
+                radius={place.circle.radius}
+                options={place.circle.options}
+              />}
+            </Fragment>
+          );
+        })}
+      </GoogleMap>
+    );
 }
+
+export default withScriptjs(withGoogleMap(Map));
