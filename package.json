@@ -1,6 +1,6 @@
 {
-  "name": "io.cordova.malukcoi",
-  "displayName": "MALUK-COI",
+  "name": "io.cordova.stoppandemia",
+  "displayName": "Stop Pandemia",
   "private": true,
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",

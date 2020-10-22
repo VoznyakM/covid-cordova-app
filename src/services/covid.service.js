@@ -1,15 +1,14 @@
 export default class covidService {
 
   constructor() {
-    this._apiBase = 'http://185.69.153.46:3000'; // process.env.REACT_APP_BACKEND_API;
-console.log('API:'+this._apiBase);
+    this._apiBase = process.env.REACT_APP_BACKEND_API;
      // 'http://localhost:3000';
      // this._apiBase = 'http://ec2-54-80-100-248.compute-1.amazonaws.com:3000';
   }
 
   async getTodayStats(url = '/stats/' + new Date().toISOString().split('T')[0]) {
     const res = await fetch(`${this._apiBase}${url}`);
-    console.log(res)
+    // console.log(res)
     return await res.json();
   }
 
